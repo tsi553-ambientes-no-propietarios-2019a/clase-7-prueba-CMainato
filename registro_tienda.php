@@ -6,6 +6,7 @@
 <body>
 
 <form action="PHP/registration.php" method ="post">
+	<form action="registro_tienda.php" method ="post">
 <h1>Registro de tienda</h1>
 
 <div>

@@ -1,6 +1,4 @@
-<?php
 
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -8,7 +6,9 @@
     <title>Index</title>
 </head>
 <body>
-
+<?php
+ echo 'Tienda registrada correctamente, puede iniciar sesion'; 
+?>
 <form action="php/proces_login.php" method ="post">
 <h1>Inicio de secion</h1>
 
@@ -26,8 +26,8 @@
 
 
 <button>Ingresar</button>
+<a href="registro_tienda.php">Registrarse</a>
+<br><br>
 </form>
-
-    
 </body>
 </html>

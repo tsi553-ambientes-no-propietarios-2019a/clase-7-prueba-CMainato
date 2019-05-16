@@ -1,37 +1,50 @@
 <?php 
-include('../common/utils.php');
+	session_start(); 
+
+	if( $_SERVER['SCRIPT_NAME'] == '../index.php' && isset($_SESSION['user']) ) {
+	header('Location: inicio.php'); 
+	exit; 
+	}
+
+	if($_GET) {
+	if(isset($_GET['mensaje'])) {
+		$mensajeDesdeRegistro = $_GET['mensaje'];
+		echo $mensajeDesdeRegistro;
+	}
+}
+
+
+
 if($_POST) {
-	if (isset($_POST['username']) && isset($_POST['pass']) && !empty($_POST['username']) && !empty($_POST['pass'])) {
+	if (isset($_POST['username']) && isset($_POST['pass'])) {
 		$username = $_POST['username'];
 		$password = $_POST['pass'];
+$conn = new mysqli('localhost','root','','pruebab11');
+
 
 		$sql = "SELECT *
 		FROM tienda
 		WHERE Usuario='$username'
-		AND Clave=MD5('$pass')";
+		AND Clave=MD5('$password')";
+		$res = $conn->query($sql); 
+			if($res->num_rows > 0){
+				
 
-		$res = $conn->query($sql);
+				while ($row = $res->fetch_assoc()){
+				$_SESSION['user'] = ['username'=>
+				 $row['Usuario'], 'id'=> $row['idTienda']];
+				
+					$NombredeUsuario = $row['Usuario'];
+					$NombredeTienda = $row['NombTienda'];
+					$idUsu = $row['idTienda'];
+		
+				header("Location: ../inicio.php?nom=$NombredeUsuario&tien=$NombredeTienda&id=$idUsu"); 
+				exit;
+			}
 
-		if ($conn->error) {
-			redirect('../index.php?error_message=Ocurrió un error: ' . $conn->error);
+			}else{
+				echo 'Usuario o contraseña incorrecto'; 
+			}
 		}
-
-		if($res->num_rows > 0) {
-				while ($row = $res->fetch_assoc()) {
-					$_SESSION['tienda'] = [
-						'Usuario' => $row['username'],
-						'idTienda' => $row['idTienda']
-					];
-					redirect('../inicio.php');
-				}
-		} else {
-			redirect('../index.php?error_message=Usuario o clave incorrectos!');
-		}
-
-
-	} else {
-		redirect('../index.php?error_message=Ingrese todos los datos!');
 	}
-} else {
-	redirect('../inicio.php');
-}
+?>
